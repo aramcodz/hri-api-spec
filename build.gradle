@@ -10,6 +10,8 @@ version = '3.0-2.0.1'
 
 
 //TODO update for GitHub actions
+//NOTE: Disabled for packaging prototype - version is hardcoded
+/*
 ext.branch = System.getenv('TRAVIS_BRANCH') != null
         ? System.getenv('TRAVIS_BRANCH')
         : grgit.open(currentDir: project.rootDir).branch.current.name
@@ -20,6 +22,8 @@ if (System.getenv('TRAVIS_TAG') == null || System.getenv('TRAVIS_TAG') == "") {
 } else {
     throw new InvalidUserDataException(String.format("The tag '%s' does not match with the current release version '%s'",System.getenv('TRAVIS_TAG'),"${version}"));
 }
+*/
+version = "pkg-proto"
 println "api-spec version: ${version}"
 
 repositories {
@@ -196,10 +200,11 @@ publishing {
 
     repositories {
         maven {
-            url 'TBD'
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/aramcodz/hri-api-spec"   //Prototype Test Url           
             credentials {
-                username findProperty('user') ?: ''
-                password findProperty('password') ?: ''
+              username = System.getenv("GITHUB_ACTOR")
+              password = System.getenv("GITHUB_TOKEN")
             }
         }
     }

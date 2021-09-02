@@ -1,0 +1,26 @@
+name: Push
+
+on:
+  push:
+    branches: [ WHFHRI-665-pkgs ]
+
+jobs:
+
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up adoptopenjdk8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+          cache: 'gradle'
+      - name: Build with Gradle
+        run: ./gradlew build           
+      - name: Publish package
+        run: gradle publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
